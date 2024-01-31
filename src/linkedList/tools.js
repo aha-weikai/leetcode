@@ -5,7 +5,7 @@
  * @param {number} val - 节点值，若未提供，默认为 0
  * @param {ListNode | null} next - 指向下一个节点的引用，若未提供，默认为 null
  */
-function ListNode(val, next) {
+export function ListNode(val, next) {
   this.val = val === undefined ? 0 : val;
   this.next = next === undefined ? null : next;
 }
