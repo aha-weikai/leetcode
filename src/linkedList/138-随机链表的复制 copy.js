@@ -20,30 +20,51 @@ function Node(val, next, random) {
  * @return {Node}
  */
 var copyRandomList = function (head) {
-  let cloneHead = new Node();
+  let cloneHead = {};
   let cloneList = cloneHead;
-  const nodeMap = new Map();
-
+  let rawHead = head;
   while (head) {
-    let node = getNode(head);
-    if (head.random) {
-      node.random = getNode(head.random);
+    cloneHead.val = head.val;
+    head = head.next;
+    if (head) {
+      cloneHead.next = {};
+      cloneHead = cloneHead.next;
+    } else {
+      cloneHead.next = null;
     }
-    cloneHead.next = node;
+  }
+
+  // 主分支
+  head = rawHead;
+  // random分支
+  let currentHead = rawHead;
+
+  // cloned main分支
+  cloneHead = cloneList;
+  // cloned random分支
+  let currentNode = cloneList;
+  while (head) {
+    currentHead = rawHead;
+    currentNode = cloneList;
+
+    if (head.random) {
+      if (!head.random) {
+        cloneHead.random = null;
+      } else {
+        while (currentHead) {
+          if (head.random === currentHead) {
+            cloneHead.random = currentNode;
+            break;
+          }
+          currentNode = currentNode.next;
+          currentHead = currentHead.next;
+        }
+      }
+    }
     head = head.next;
     cloneHead = cloneHead.next;
   }
-
-  return cloneList.next;
-
-  function getNode(node) {
-    let innerNode = nodeMap.get(node);
-    if (!innerNode) {
-      innerNode = new Node(node.val);
-      nodeMap.set(node, innerNode);
-    }
-    return innerNode;
-  }
+  return rawHead ? cloneList : null;
 };
 
 const node0 = new Node(7, null, null);
